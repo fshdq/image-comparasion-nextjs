@@ -168,7 +168,7 @@ const Home: React.FC = () => {
         )}
 
         {/* Placeholder Message */}
-        {(!beforeImage || !afterImage) && <div className="text-center text-gray-500">Please upload both "Before" and "After" images to see the comparison.</div>}
+        {(!beforeImage || !afterImage) && <div className="text-center text-gray-500">Please upload both &quot;Before&quot; and &quot;After&quot; images to see the comparison.</div>}
       </div>
     </div>
   );
