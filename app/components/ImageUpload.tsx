@@ -1,53 +1,57 @@
-import React, { useState } from 'react';
+'use client';
+import { useState } from 'react';
 
 interface ImageUploadProps {
-  onUpload: (image1: File | null, image2: File | null) => void;
+  onUpload: (file: File | null) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload }) => {
-  const [image1, setImage1] = useState<File | null>(null);
-  const [image2, setImage2] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const handleImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setImage: (file: File | null) => void
-  ) => {
-    const file = e.target.files?.[0] || null;
-    setImage(file);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    updateFile(file);
   };
 
-  const handleSubmit = () => {
-    onUpload(image1, image2);
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files?.[0] || null;
+    updateFile(file);
+  };
+
+  const updateFile = (file: File | null) => {
+    setSelectedFile(file);
+    onUpload(file);
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    } else {
+      setPreviewUrl(null);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex flex-col items-center gap-2">
-        <label className="block">
-          <span className="text-gray-700">Upload First Image:</span>
-          <input
-            type="file"
-            accept="image/*"
-            className="mt-1 block w-full"
-            onChange={(e) => handleImageChange(e, setImage1)}
-          />
-        </label>
-        <label className="block">
-          <span className="text-gray-700">Upload Second Image:</span>
-          <input
-            type="file"
-            accept="image/*"
-            className="mt-1 block w-full"
-            onChange={(e) => handleImageChange(e, setImage2)}
-          />
-        </label>
-      </div>
-      <button
-        onClick={handleSubmit}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Compare Images
-      </button>
+    <div
+      className="relative flex flex-col items-center justify-center w-full h-44 border-2 border-gray-300 bg-white border-dashed rounded-lg transition-all duration-300 p-4 cursor-pointer"
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}
+    >
+      {previewUrl ? (
+        <img src={previewUrl} alt="Uploaded" className="w-full h-full object-cover rounded-lg" />
+      ) : (
+        <>
+          <div className="w-12 h-12 text-gray-500 mb-2"></div>
+          <p className="text-sm text-gray-600">Drag & drop or click to upload</p>
+        </>
+      )}
+      <input
+        type="file"
+        accept="image/*"
+        className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
