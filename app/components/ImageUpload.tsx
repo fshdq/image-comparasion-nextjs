@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 interface ImageUploadProps {
@@ -39,7 +40,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload }) => {
       onDrop={handleDrop}
     >
       {previewUrl ? (
-        <img src={previewUrl} alt="Uploaded" className="w-full h-full object-cover rounded-lg" />
+        <Image 
+        src={previewUrl} 
+        alt="Uploaded Image" 
+        width={300} // Adjust width based on UI needs
+        height={200} // Adjust height based on UI needs
+        className="w-full h-full object-cover rounded-lg" 
+        priority 
+      />
       ) : (
         <>
           <div className="w-12 h-12 text-gray-500 mb-2"></div>
