@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 interface ImageComparisonProps {
@@ -25,12 +26,17 @@ const ImageComparison: React.FC<ImageComparisonProps> = ({
       <div className="relative">
         {/* Before Image */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-          <img
-            src={beforeImage}
-            alt="Before"
-            className="w-full h-auto"
-            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-          />
+        {beforeImage && (
+            <Image 
+              src={beforeImage} 
+              alt="Before" 
+              width={500} 
+              height={300} 
+              layout="responsive"
+              className="w-full h-auto"
+              priority
+            />
+          )}
           <div className="absolute bottom-4 left-4 bg-black bg-opacity-75 text-white px-4 py-2 rounded">
             {beforeLabel}
           </div>
@@ -38,7 +44,17 @@ const ImageComparison: React.FC<ImageComparisonProps> = ({
 
         {/* After Image */}
         <div className="w-full h-auto">
-          <img src={afterImage} alt="After" className="w-full h-auto" />
+        {afterImage && (
+              <Image 
+                src={afterImage} 
+                alt="After" 
+                width={500} 
+                height={300} 
+                layout="responsive"
+                className="w-full h-auto"
+                priority
+              />
+            )}
           <div className="absolute bottom-4 right-4 bg-black bg-opacity-75 text-white px-4 py-2 rounded">
             {afterLabel}
           </div>
